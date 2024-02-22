@@ -8,12 +8,18 @@ pipeline {
         WEB_IMAGE_NAME = "vikaschenny/demo-web:latest"
     }
     stages {
+        stage('Clean Workspace') {
+            steps {
+                // Clean up the workspace before proceeding
+                cleanWs()
+            }
+        }
         stage('Clone Repository') {
             steps {
-                // Set the path to the Git executable
-                withEnv(["PATH+GIT=/usr/bin"]) {
-                    // Clone the repository with credentials
-                    git credentialsId: 'demo-id', url: 'https://github.com/vikaschenny/task.git'
+                script {
+                  sh '''
+                    git clone https://github.com/vikaschenny/task.git
+                    '''
                 }
             }
         }
@@ -21,7 +27,7 @@ pipeline {
             steps {
                 script {
                     // Build API Docker image
-                    docker.build("${API_IMAGE_NAME}", "./node-3tier-app2/api")
+                    docker.build("${API_IMAGE_NAME}", "./task/node-3tier-app2/api")
                 }
             }
         }
@@ -30,7 +36,7 @@ pipeline {
             steps {
                 script {
                     // Build Web Docker image
-                    docker.build("${WEB_IMAGE_NAME}", "./node-3tier-app2/web")
+                    docker.build("${WEB_IMAGE_NAME}", "./task//node-3tier-app2/web")
                 }
             }
         }
@@ -38,15 +44,12 @@ pipeline {
         stage('Push Images to Docker Registry') {
             steps {
                 script {
-                    // Push API image to Docker registry
-                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                    // Push API image to Docker registry docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
                         docker.image("${API_IMAGE_NAME}").push()
-                    }
 
                     // Push Web image to Docker registry
-                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                  //  docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") 
                         docker.image("${WEB_IMAGE_NAME}").push()
-                    }
                 }
             }
         }
