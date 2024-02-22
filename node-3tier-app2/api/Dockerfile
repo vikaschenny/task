@@ -1,6 +1,8 @@
 FROM ubuntu:22.04
 # Install Node.js and npm
 RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install net-tools vim -y \
     && apt-get install -y nodejs npm \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
