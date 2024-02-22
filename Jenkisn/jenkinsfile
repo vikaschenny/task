@@ -7,15 +7,14 @@ pipeline {
         API_IMAGE_NAME = "vikaschenny/demo-api:latest"
         WEB_IMAGE_NAME = "vikaschenny/demo-web:latest"
     }
-    tools {
-        // Define the Git tool to use
-        git 'git'
-    }
     stages {
         stage('Clone Repository') {
             steps {
-                // Clone the repository
-                git credentialsId: 'demo-id', url: 'https://github.com/vikaschenny/task.git'
+                // Set the path to the Git executable
+                withEnv(["PATH+GIT=/usr/bin"]) {
+                    // Clone the repository with credentials
+                    git credentialsId: 'demo-id', url: 'https://github.com/vikaschenny/task.git'
+                }
             }
         }
         stage('Build API Image') {
