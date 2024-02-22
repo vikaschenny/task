@@ -9,7 +9,7 @@ pipeline {
     }
     tools {
         // Define the Git tool to use
-        git '/usr/bin/git'
+        git 'git'
     }
     stages {
         stage('Clone Repository') {
