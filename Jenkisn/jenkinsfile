@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+    
+    environment {
+        // DOCKER_REGISTRY = "your-docker-registry-url"
+        // DOCKER_CREDENTIALS_ID = "your-docker-credentials-id"
+        API_IMAGE_NAME = "vikaschenny/demo-api:latest"
+        WEB_IMAGE_NAME = "vikaschenny/demo-web:latest"
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the repository
+                git 'https://github.com/vikaschenny/task.git'
+            }
+        }
+        stage('Build API Image') {
+            steps {
+                script {
+                    // Build API Docker image
+                    docker.build("${API_IMAGE_NAME}", "./node-3tier-app2/api")
+                }
+            }
+        }
+        
+        stage('Build Web Image') {
+            steps {
+                script {
+                    // Build Web Docker image
+                    docker.build("${WEB_IMAGE_NAME}", "./node-3tier-app2/web")
+                }
+            }
+        }
+
+        stage('Push Images to Docker Registry') {
+            steps {
+                script {
+                    // Push API image to Docker registry
+                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                        docker.image("${API_IMAGE_NAME}").push()
+                    }
+
+                    // Push Web image to Docker registry
+                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}") {
+                        docker.image("${WEB_IMAGE_NAME}").push()
+                    }
+                }
+            }
+        }
+    }
+}
