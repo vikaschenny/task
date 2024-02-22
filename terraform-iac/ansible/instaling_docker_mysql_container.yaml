@@ -1,0 +1,28 @@
+---
+- name: Install Docker and MySQL
+  hosts: private_instance
+  become: true
+  tasks:
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Pull MySQL image
+      docker_image:
+        name: mysql
+        state: present
+
+    - name: Run MySQL container
+      docker_container:
+        name: mysql_container
+        image: mysql
+        ports:
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"

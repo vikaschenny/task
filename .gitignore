@@ -1,0 +1,24 @@
+# Ignore files larger than 100MB
+*.tar.gz
+*.zip
+*.mp4
+*.avi
+*.mkv
+# Add any other file extensions or patterns that you want to ignore
+
+# Ignore directories specific to certain tools or frameworks
+.terraform/
+terraform-iac/.terraform/
+.vscode/
+
+# Add other directories as needed
+
+# Ignore files generated during development or build process
+/build/
+/dist/
+/node_modules/
+# Add other generated directories as needed
+
+# Ignore system or temporary files
+.DS_Store
+Thumbs.db
