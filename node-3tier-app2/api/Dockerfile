@@ -13,6 +13,7 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+RUN npm update pg-protocol
 
 # Copy the rest of the application
 COPY . .
