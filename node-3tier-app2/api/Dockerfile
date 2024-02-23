@@ -1,4 +1,4 @@
-FROM node
+FROM node:16.14.0
 # Install Node.js and npm
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -20,7 +20,8 @@ RUN rm -rf node_modules package-lock.json
 RUN npm install
 RUN npm update pg-protocol
 RUN npm audit fix --force
-
+RUN npm install pg@latest
+RUN node --inspect ./bin/www
 
 
 # Copy the rest of the application
