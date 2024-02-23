@@ -21,7 +21,7 @@ RUN npm install
 RUN npm update pg-protocol
 RUN npm audit fix --force
 RUN npm install pg@latest
-RUN node --inspect ./bin/www
+# RUN node --inspect ./bin/www
 
 
 # Copy the rest of the application
