@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM node
 # Install Node.js and npm
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -16,6 +16,7 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 RUN npm update pg-protocol
+RUN npm audit fix --force
 
 # Copy the rest of the application
 COPY . .
