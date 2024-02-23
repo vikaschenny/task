@@ -14,9 +14,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
+RUN npm install -g npm@latest
+RUN npm cache clean --force
+RUN rm -rf node_modules package-lock.json
 RUN npm install
 RUN npm update pg-protocol
 RUN npm audit fix --force
+
+
 
 # Copy the rest of the application
 COPY . .
